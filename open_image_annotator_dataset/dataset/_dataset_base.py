@@ -25,7 +25,7 @@ class OpenImageAnnotatorDatasetBase(Dataset, ABC):
         return len(self.annotations)
 
 
-def parse_dataset_file(file_path: str | Path):
+def parse_dataset_file(file_path: str | Path) -> tuple[Metadata, BubbleViewConstraints, list[Annotation]]:
     file_path = Path(file_path)
     with file_path.open() as f:
         json_data = json.load(f)
@@ -36,7 +36,7 @@ def parse_dataset_file(file_path: str | Path):
 
         for annotation in json_data['annotations']:
             annotation_id = annotation['id']
-            image = Path(root / annotation['image'].replace(r"\\", "/"))
+            image = root / str(annotation['image']).replace("\\", "/")
             clickpoints = [ClickPoint(**cp) for cp in annotation['click_points']]
             image_labels = [Label(**il) for il in annotation['image_labels']]
             bounds = [BoundingBox(**bbox) for bbox in annotation['bounds']]
@@ -47,6 +47,7 @@ def parse_dataset_file(file_path: str | Path):
                                 click_points=clickpoints,
                                 bounding_boxes=bounds,
                                 )
+
             annotations.append(result)
 
     return metadata, constraints, annotations
