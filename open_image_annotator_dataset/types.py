@@ -85,8 +85,8 @@ class ClickPoint:
     radius: float
 
     @property
-    def position(self) -> tuple[float, float]:
-        return self.x, self.y
+    def position(self) -> tuple[int, int]:
+        return int(self.x), int(self.y)
 
 
 @dataclass(frozen=True)
