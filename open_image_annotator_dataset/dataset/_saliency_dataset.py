@@ -68,7 +68,7 @@ def generate_saliency_map(clickpoints: list[ClickPoint],
 
     for clickpoint in clickpoints:
         if 0 <= clickpoint.x < width and 0 <= clickpoint.y < height:
-            circle_radius = int((clickpoint.radius / 100.0) * short_side * magnification_rate)
+            circle_radius = (clickpoint.radius / 100.0) * short_side * magnification_rate
             if circle_radius < 1:
                 circle_radius = 1
 
@@ -76,8 +76,8 @@ def generate_saliency_map(clickpoints: list[ClickPoint],
 
             cv2.circle(overlay,
                        clickpoint.position,
-                       circle_radius,
-                       (point_intensity),
+                       radius=int(circle_radius),
+                       color=point_intensity,
                        thickness=-1)
 
             saliency_map = np.clip(saliency_map + overlay, 0, 1)
